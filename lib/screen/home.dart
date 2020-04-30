@@ -1,6 +1,7 @@
-import 'package:fancy_drawer/fancy_drawer.dart';
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hidden_drawer/flutter_hidden_drawer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:lifebetter/screen/Accessory/accessory_main.dart';
@@ -14,10 +15,10 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
-  
+class _HomePageState extends State<HomePage> {
   var firstColor = "#74F2CE", secondColor = "#7CFFCB";
+  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+
   List<Widget> siderpage = [
     HealthPage(),
     JobPage(),
@@ -26,28 +27,8 @@ class _HomePageState extends State<HomePage>
     PostsPage()
   ];
   int _currentIndex = 0, pageindex = 0;
-  TabController tabBarController;
-  FancyDrawerController _controller;
+
   var fullWidth, fullHeight;
-  @override
-  void initState() {
-    super.initState();
-    _controller = FancyDrawerController(
-        vsync: this, duration: Duration(milliseconds: 250))
-      ..addListener(() {
-        setState(() {});
-      });
-  }
-
-  
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    tabBarController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -56,172 +37,106 @@ class _HomePageState extends State<HomePage>
     fullWidth = MediaQuery.of(context).size.width;
     fullHeight = MediaQuery.of(context).size.height;
     ScreenUtil.init(context, width: 1125, height: 2436, allowFontScaling: true);
-    return Material(
-      child: FancyDrawerWrapper(
-        backgroundColor: Colors.white,
-        controller: _controller,
-        drawerItems: <Widget>[
-          GestureDetector(
-            
-            onTap: () {
-              pageindex = 0;
-            
-              print("Got Health");
-            },
-            child: Text(
-              "Health",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.purple.shade700,
-                fontWeight: FontWeight.bold,
+    return HiddenDrawer(
+      drawerWidth: MediaQuery.of(context).size.width * .4,
+      drawer: HiddenDrawerMenu(
+        menu: <DrawerMenu>[
+          DrawerMenu(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text("Menu 1"),
               ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              pageindex = 1;
-
-              print("Got Job");
-            },
-            child: Text(
-              "Home Based Business",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.purple.shade700,
-                fontWeight: FontWeight.bold,
+              onPressed: () {
+                print("Menu 1");
+              }),
+          DrawerMenu(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text("Menu 2"),
               ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              pageindex = 2;
-              print("Got News");
-            },
-            child: Text(
-              "Health News",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.purple.shade700,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              pageindex = 3;
-              print("Got Accessory");
-            },
-            child: Text(
-              "Accessories",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.purple.shade700,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              pageindex = 4;
-              print("Got Posts");
-            },
-            child: Text(
-              "Healthy Status",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.purple.shade700,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Text(
-            "Log out",
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.purple.shade700,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+              onPressed: () {
+                print("Menu 2");
+              }),
         ],
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: <Color>[
-                        Hexcolor(firstColor),
-                        Hexcolor(secondColor)
-                      ])),
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: ScreenUtil().setHeight(60),
-                      left: ScreenUtil().setWidth(40),
-                      right: ScreenUtil().setWidth(40),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                            color: Colors.white,
-                            icon: Icon(Icons.menu),
-                            onPressed: () {
-                              _controller.toggle();
-                            }),
-                        IconButton(
-                            color: Colors.white,
-                            icon: Icon(Icons.notifications_active),
-                            onPressed: () {
-                              print("Clicked Noti");
-                            }),
-                      ],
-                    ),
+      ),
+      child: Scaffold(
+        key: _drawerKey,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: <Color>[
+                      Hexcolor(firstColor),
+                      Hexcolor(secondColor)
+                    ])),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: ScreenUtil().setHeight(60),
+                    left: ScreenUtil().setWidth(40),
+                    right: ScreenUtil().setWidth(40),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                          color: Colors.white,
+                          icon: Icon(Icons.menu),
+                          onPressed: () {
+                            print("Clicked Menu");
+                          }),
+                      IconButton(
+                          color: Colors.white,
+                          icon: Icon(Icons.notifications_active),
+                          onPressed: () {
+                            print("Clicked Noti");
+                          }),
+                    ],
                   ),
                 ),
-                Container(
-                  child: siderpage[pageindex],
-                )
-              ],
-            ),
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            onTap: _onTapped,
-            currentIndex:
-                _currentIndex, // this will be set when a new tab is tapped
-            items: [
-              BottomNavigationBarItem(
-                icon: GestureDetector(
-                  child: new Icon(
-                    Icons.home,
-                  ),
-                ),
-                title: new Text('Health'),
               ),
-              BottomNavigationBarItem(
-                icon: GestureDetector(
-                  child: new Icon(Icons.work),
-                ),
-                title: new Text('Jobs'),
-              ),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.data_usage), title: Text('News'))
+              Container(
+                child: siderpage[_currentIndex],
+              )
             ],
           ),
         ),
+        bottomNavigationBar: BottomNavyBar(
+          selectedIndex: _currentIndex,
+          showElevation: true,
+          itemCornerRadius: 8,
+          curve: Curves.easeInBack,
+          onItemSelected: (index) => setState(() {
+            _currentIndex = index;
+          }),
+          items: [
+            BottomNavyBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Health'),
+              activeColor: Hexcolor(firstColor),
+              textAlign: TextAlign.center,
+            ),
+            BottomNavyBarItem(
+              icon: Icon(Icons.work),
+              title: Text('Jobs'),
+              activeColor: Hexcolor(firstColor),
+              textAlign: TextAlign.center,
+            ),
+            BottomNavyBarItem(
+              icon: Icon(Icons.new_releases),
+              title: Text(
+                'News ',
+              ),
+              activeColor: Hexcolor(secondColor),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
-  }
-
-  void _onTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-      pageindex = _currentIndex;
-      print("$_currentIndex");
-    });
   }
 }
