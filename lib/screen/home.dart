@@ -16,8 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var firstColor = "#74F2CE", secondColor = "#7CFFCB";
-  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
+  var firstColor = "#14C9CB", secondColor = "#7CFFCB";
 
   List<Widget> siderpage = [
     HealthPage(),
@@ -26,7 +25,7 @@ class _HomePageState extends State<HomePage> {
     AccessoryPage(),
     PostsPage()
   ];
-  int _currentIndex = 0, pageindex = 0;
+  int pageindex = 0;
 
   var fullWidth, fullHeight;
   @override
@@ -44,74 +43,131 @@ class _HomePageState extends State<HomePage> {
           DrawerMenu(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Text("Menu 1"),
+                child: Text("Health"),
               ),
               onPressed: () {
-                print("Menu 1");
+                setState(() {
+                  pageindex = 0;
+                });
+                print("Clicked Health $pageindex");
               }),
           DrawerMenu(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Text("Menu 2"),
+                child: Text("Jobs"),
               ),
               onPressed: () {
-                print("Menu 2");
+                setState(() {
+                  pageindex = 1;
+                });
+                print("Clicked Jobs");
+              }),
+          DrawerMenu(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text("News"),
+              ),
+              onPressed: () {
+                setState(() {
+                  pageindex = 2;
+                });
+                print("Clicked News");
+              }),
+          DrawerMenu(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text("Accessory"),
+              ),
+              onPressed: () {
+                setState(() {
+                  pageindex = 3;
+                });
+                print("Clicked Accesory");
+              }),
+          DrawerMenu(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text("Healthy Posts"),
+              ),
+              onPressed: () {
+                setState(() {
+                  pageindex = 4;
+                });
+                print("Clicked Hposts");
+              }),
+          DrawerMenu(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text("Profile"),
+              ),
+              onPressed: () {
+                print("Clicked Profile");
+              }),
+          DrawerMenu(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text("Setting"),
+              ),
+              onPressed: () {
+                print("Clicked Setting");
               }),
         ],
+        header: GestureDetector(
+          onTap: () => print("Clicked Profile"),
+          child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 50.0),
+              width: 48.0,
+              height: 48.0,
+              decoration: new BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0)),
+                  image: new DecorationImage(
+                      fit: BoxFit.fill,
+                      image: AssetImage("assets/images/picture.jpg")))),
+        ),
       ),
       child: Scaffold(
-        key: _drawerKey,
+        appBar: AppBar(
+          backgroundColor: Hexcolor(firstColor),
+          leading: HiddenDrawerIcon(
+            mainIcon: Icon(
+              Icons.menu,
+              color: Colors.white,
+            ),
+          ),
+          actions: [
+            Container(
+                child: InkWell(
+                    onTap: () {
+                      print("Noti Clicked");
+                    },
+                    child: Icon(
+                      Icons.notification_important,
+                      color: Colors.white,
+                    )))
+          ],
+        ),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: <Color>[
-                      Hexcolor(firstColor),
-                      Hexcolor(secondColor)
-                    ])),
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    top: ScreenUtil().setHeight(60),
-                    left: ScreenUtil().setWidth(40),
-                    right: ScreenUtil().setWidth(40),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                          color: Colors.white,
-                          icon: Icon(Icons.menu),
-                          onPressed: () {
-                            print("Clicked Menu");
-                          }),
-                      IconButton(
-                          color: Colors.white,
-                          icon: Icon(Icons.notifications_active),
-                          onPressed: () {
-                            print("Clicked Noti");
-                          }),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                child: siderpage[_currentIndex],
+                child: siderpage[pageindex],
               )
             ],
           ),
         ),
         bottomNavigationBar: BottomNavyBar(
-          selectedIndex: _currentIndex,
+          selectedIndex: pageindex,
           showElevation: true,
           itemCornerRadius: 8,
           curve: Curves.easeInBack,
           onItemSelected: (index) => setState(() {
-            _currentIndex = index;
+            pageindex = index;
+            print("$pageindex");
           }),
           items: [
             BottomNavyBarItem(
@@ -131,7 +187,7 @@ class _HomePageState extends State<HomePage> {
               title: Text(
                 'News ',
               ),
-              activeColor: Hexcolor(secondColor),
+              activeColor: Hexcolor(firstColor),
               textAlign: TextAlign.center,
             ),
           ],

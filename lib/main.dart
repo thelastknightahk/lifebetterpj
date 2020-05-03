@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hidden_drawer/flutter_hidden_drawer.dart';
 
 import 'package:hexcolor/hexcolor.dart';
+
 import 'package:lifebetter/screen/home.dart';
 
 void main() => runApp(
@@ -20,10 +21,10 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
           primaryColor: Hexcolor(firstColor),
-          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: HomePage(),
       ),

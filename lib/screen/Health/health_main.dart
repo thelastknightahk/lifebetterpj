@@ -10,8 +10,8 @@ class HealthPage extends StatefulWidget {
 
 class _HealthPageState extends State<HealthPage> {
   var fullWidth, fullHeight;
-  var firstColor = "#74F2CE",
-      secondColor = "#7CFFCB",
+  var firstColor = "#1BD7BB",
+      secondColor = "#14C9CB",
       lightGreyColor = "#F8F8F8";
 
   AutoScrollController controller;
@@ -35,62 +35,27 @@ class _HealthPageState extends State<HealthPage> {
       child: Column(
         children: [
           Container(
-            height: fullHeight / 3.8,
+            height: fullHeight / 6,
             color: Colors.white,
             child: Stack(
               children: [
                 Positioned(
+                  left: fullWidth / 5,
                   child: Container(
-                    height: fullHeight / 5.5,
-                    width: fullWidth,
+                    margin: EdgeInsets.symmetric(vertical: 10.0),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(45.0),
-                            bottomRight: Radius.circular(5.0)),
                         gradient: LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: <Color>[
                               Hexcolor(firstColor),
                               Hexcolor(secondColor)
-                            ])),
-                    child: Container(
-                      margin:
-                          EdgeInsets.only(top: ScreenUtil().setHeight(50.0)),
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () => print("Clicked Profile"),
-                            child: Container(
-                                width: 48.0,
-                                height: 48.0,
-                                decoration: new BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10.0),
-                                        topRight: Radius.circular(10.0),
-                                        bottomLeft: Radius.circular(10.0),
-                                        bottomRight: Radius.circular(10.0)),
-                                    image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: AssetImage(
-                                            "assets/images/picture.jpg")))),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: fullHeight / 7.9,
-                  left: fullWidth / 5,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Hexcolor(lightGreyColor),
+                            ]),
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10.0),
-                          topRight: Radius.circular(10.0),
-                          bottomRight: Radius.circular(10.0),
-                          bottomLeft: Radius.circular(10.0),
+                          topLeft: Radius.circular(3.0),
+                          topRight: Radius.circular(30.0),
+                          bottomRight: Radius.circular(3.0),
+                          bottomLeft: Radius.circular(15.0),
                         )),
                     width: fullWidth / 1.5,
                     height: fullHeight / 8,
@@ -103,21 +68,49 @@ class _HealthPageState extends State<HealthPage> {
                             children: [
                               Text(
                                 "02",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
                               ),
-                              Text("Level")
+                              Text(
+                                "Level",
+                                style: TextStyle(color: Colors.white),
+                              )
                             ],
                           ),
                         ),
                         Container(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [Text("25/4/20"), Text("Date")],
+                            children: [
+                              Text(
+                                "25/4/20",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "Date",
+                                style: TextStyle(color: Colors.white),
+                              )
+                            ],
                           ),
                         ),
                         Container(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [Text("35'C"), Text("Temperature")],
+                            children: [
+                              Text(
+                                "35'C",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                "Temperature",
+                                style: TextStyle(color: Colors.white),
+                              )
+                            ],
                           ),
                         ),
                       ],
@@ -127,8 +120,11 @@ class _HealthPageState extends State<HealthPage> {
               ],
             ),
           ),
+          SizedBox(
+            height: 15.0,
+          ),
           Container(
-            height: fullHeight / 1.9,
+            height: fullHeight / 1.55,
             child: ListView.builder(
                 scrollDirection: scrollDirection,
                 controller: controller,

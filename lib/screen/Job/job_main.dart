@@ -100,7 +100,8 @@ class _JobPageState extends State<JobPage> {
                     ),
                   );
                 }),
-              ))
+              )
+              )
         ],
       ),
     );
