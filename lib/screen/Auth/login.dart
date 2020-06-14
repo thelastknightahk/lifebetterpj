@@ -1,7 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
+
+import 'package:lifebetter/utils/offdata.dart';
+import 'package:lifebetter/screen/home.dart';
+import 'package:lifebetter/utils/userpreference.dart';
+
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -14,13 +19,15 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   var firstColor = "#14C9CB", secondColor = "#7CFFCB";
-
+  var phoneNumber, userPass;
+  String exitApp;
   Country _selectedDialogCountry =
       CountryPickerUtils.getCountryByPhoneCode('95');
+  final databaseReference = Firestore.instance;
+  final userpreference = UserPreference();
   @override
   Widget build(BuildContext context) {
     var fullwidth = MediaQuery.of(context).size.width;
-    var fullheight = MediaQuery.of(context).size.height;
 
     return Container(
       margin: const EdgeInsets.all(16.0),
@@ -47,6 +54,10 @@ class _LoginFormState extends State<LoginForm> {
                 Container(
                   width: fullwidth / 2,
                   child: TextField(
+                    keyboardType: TextInputType.phone,
+                    onChanged: (val) {
+                      phoneNumber = OffData.phCode + val;
+                    },
                     decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.blueAccent),
@@ -57,17 +68,6 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   ),
                 ),
-                Container(
-                  child: InkWell(
-                    onTap: () {
-                      print("CLicked OTp");
-                    },
-                    child: Text(
-                      "OTP",
-                      style: TextStyle(fontSize: 12.0),
-                    ),
-                  ),
-                )
               ],
             ),
           ),
@@ -75,13 +75,16 @@ class _LoginFormState extends State<LoginForm> {
           Container(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              onChanged: (val) {
+                userPass = val;
+              },
               obscureText: true,
               decoration: InputDecoration(
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blueAccent),
                   borderRadius: BorderRadius.circular(15),
                 ),
-                hintText: "Enter OTP",
+                hintText: "Enter Password",
                 border: OutlineInputBorder(borderSide: BorderSide()),
               ),
             ),
@@ -95,13 +98,36 @@ class _LoginFormState extends State<LoginForm> {
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: Text("Login"),
-            onPressed: () {},
+            onPressed: () async {
+              await getFirebaseData();
+            },
           ),
         ],
       ),
     );
   }
 
+  Future getFirebaseData() async {
+    var dref = databaseReference.collection("users").document(phoneNumber);
+    dref.get().then((documentSnapshot) {
+      var pass = userPass;
+      if (pass == "${documentSnapshot.data['Password']}") {
+         userpreference.addStringToSF();
+        print(
+            "Hello ${documentSnapshot.data['Password']} Name  ${documentSnapshot.data['UserName']} Phno ${documentSnapshot.data['PhoneNo']}");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } else {
+        print("Something Went Wroung");
+      }
+
+      // check and do something with the data here.
+    });
+    
+  }
+   
   void _openCountryPickerDialog() => showDialog(
         context: context,
         builder: (context) => Theme(

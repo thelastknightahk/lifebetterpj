@@ -3,12 +3,12 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:lifebetter/screen/Auth/login.dart';
 import 'package:lifebetter/screen/Auth/signup.dart';
 
-class AuthThreePage extends StatefulWidget {
+class AuthenPage extends StatefulWidget {
   @override
-  _AuthThreePageState createState() => _AuthThreePageState();
+  _AuthenPageState createState() => _AuthenPageState();
 }
 
-class _AuthThreePageState extends State<AuthThreePage> {
+class _AuthenPageState extends State<AuthenPage> {
   var firstColor = "#14C9CB", secondColor = "#7CFFCB", lightgrey = "#F8F8F8";
   bool formVisible;
   int _formsIndex;
@@ -36,14 +36,16 @@ class _AuthThreePageState extends State<AuthThreePage> {
               children: <Widget>[
                 const SizedBox(height: kToolbarHeight + 10),
                 Expanded(
-                  child: Column(
+                  child: ListView(
+                    shrinkWrap: false,
+          padding: const EdgeInsets.all(16.0),
                     children: <Widget>[
                       Container(
                           width: 100.0,
                           height: 100.0,
                           decoration: new BoxDecoration(
                               image: new DecorationImage(
-                                  fit: BoxFit.fill,
+                                 
                                   image:
                                       AssetImage("assets/images/logo3.png")))),
                       Text(

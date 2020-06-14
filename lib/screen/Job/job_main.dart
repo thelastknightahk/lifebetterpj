@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:lifebetter/model/businessmodel.dart';
+import 'package:lifebetter/screen/Job/job_item.dart';
 
 class JobPage extends StatefulWidget {
   @override
@@ -60,6 +61,11 @@ class _JobPageState extends State<JobPage> {
                 children: List.generate(hbJobs.length, (index) {
                   return GestureDetector(
                     onTap: () {
+                      var mydata = hbJobs[index].businessName;
+                      Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => JobItem(data: mydata,)),
+  );
                       print("Clicked ${hbJobs[index].businessName}");
                     },
                     child: Card(

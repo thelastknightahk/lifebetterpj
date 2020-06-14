@@ -7,6 +7,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:lifebetter/screen/Accessory/accessory_main.dart';
 import 'package:lifebetter/screen/Health/health_main.dart';
 import 'package:lifebetter/screen/Job/job_main.dart';
+import 'package:lifebetter/screen/Logout/logout.dart';
 import 'package:lifebetter/screen/News/news_main.dart';
 import 'package:lifebetter/screen/Posts/posts_main.dart';
 
@@ -17,13 +18,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var firstColor = "#14C9CB", secondColor = "#7CFFCB";
+  @override
+  void initState(){
+    super.initState();
+    
+  }
 
   List<Widget> siderpage = [
     HealthPage(),
     JobPage(),
     NewsPage(),
     AccessoryPage(),
-    PostsPage()
+    PostsPage(),
+    LogOut()
   ];
   int pageindex = 0;
 
@@ -112,6 +119,17 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
                   print("Clicked Setting");
                 }),
+                 DrawerMenu(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text("LogOut"),
+                ),
+                onPressed: () {
+                  setState(() {
+                    pageindex = 5;
+                  });
+                  print("Clicked Logout");
+                }),
           ],
           header: GestureDetector(
             onTap: () => print("Clicked Profile"),
@@ -129,6 +147,7 @@ class _HomePageState extends State<HomePage> {
                         fit: BoxFit.fill,
                         image: AssetImage("assets/images/picture.jpg")))),
           ),
+        
         ),
         child: Scaffold(
             appBar: AppBar(

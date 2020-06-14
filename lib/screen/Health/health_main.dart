@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:lifebetter/screen/Health/healthdetail.dart';
+import 'package:lifebetter/screen/Loader/circularLoader3.dart';
 
 class HealthPage extends StatefulWidget {
   @override
@@ -13,17 +17,27 @@ class _HealthPageState extends State<HealthPage> {
       secondColor = "#14C9CB",
       lightGreyColor = "#F8F8F8";
 
-  AutoScrollController controller;
   final scrollDirection = Axis.vertical;
+  List<dynamic> healthdata = [];
+
   @override
   void initState() {
     super.initState();
-    controller = AutoScrollController(
-        viewportBoundaryGetter: () =>
-            Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
-        axis: scrollDirection);
+    _fetchData();
+  }
 
-    _scrollToIndex();
+  Future _fetchData() async {
+    final response = await http.get(
+        "http://gsx2json.com/api?id=14TGwS0ew-nXyES5TdpjLtNDlnBiC_8wEB9Hz0yJd9kQ&sheet=1");
+    List<dynamic> data;
+    if (response.statusCode == 200) {
+      Map<String, dynamic> map = json.decode(response.body);
+      data = map["rows"];
+      healthdata = data;
+    } else {
+      throw Exception('Failed to load photos');
+    }
+    return healthdata;
   }
 
   @override
@@ -122,18 +136,42 @@ class _HealthPageState extends State<HealthPage> {
           SizedBox(
             height: 15.0,
           ),
-          Container(
-            height: fullHeight / 1.55,
-            child: ListView.builder(
-                scrollDirection: scrollDirection,
-                controller: controller,
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                itemCount: 55,
-                itemBuilder: (context, index) {
-                  return _wrapScrollTag(
-                    index: index,
-                    child: Card(
+          _healthListView(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _healthListView(BuildContext context) {
+    return FutureBuilder(
+      future: _fetchData(),
+      builder: (context, snapshot) {
+        healthdata = snapshot.data;
+        if (healthdata == null) {
+          return ColorLoader3(
+            dotRadius: 10.0,
+          );
+        }
+        return Container(
+          height: fullHeight / 1.66,
+          child: ListView.builder(
+              scrollDirection: scrollDirection,
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HealthDetail(
+                                detailData: healthdata,
+                                index: index,
+                              )),
+                    );
+                  },
+                  child: Card(
                       color: Hexcolor(lightGreyColor),
                       elevation: 10.0,
                       child: Container(
@@ -164,7 +202,7 @@ class _HealthPageState extends State<HealthPage> {
                                 children: [
                                   Container(
                                     child: Text(
-                                      "FirstDay Of Excercise",
+                                      "Hello",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -174,7 +212,7 @@ class _HealthPageState extends State<HealthPage> {
                                   ),
                                   Container(
                                     child: Text(
-                                      "let do it",
+                                      "${healthdata[index]['description']}",
                                       style: TextStyle(color: Colors.black54),
                                     ),
                                   )
@@ -188,31 +226,11 @@ class _HealthPageState extends State<HealthPage> {
                             )
                           ],
                         ),
-                      ),
-                    ),
-                  );
-                }),
-          )
-        ],
-      ),
+                      )),
+                );
+              }),
+        );
+      },
     );
   }
-
-  int counter = 0;
-  Future _scrollToIndex() async {
-    setState(() {
-      counter = 5;
-    });
-
-    await controller.scrollToIndex(5, preferPosition: AutoScrollPosition.begin);
-    controller.highlight(counter);
-  }
-
-  Widget _wrapScrollTag({int index, Widget child}) => AutoScrollTag(
-        key: ValueKey(index),
-        controller: controller,
-        index: index,
-        child: child,
-        highlightColor: Colors.black.withOpacity(0.1),
-      );
 }
