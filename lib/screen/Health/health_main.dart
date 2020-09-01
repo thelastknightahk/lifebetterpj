@@ -1,8 +1,12 @@
 import 'dart:convert';
 
+import 'package:after_layout/after_layout.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:lifebetter/model/NoInternet/ErrorHelper.dart';
+import 'package:lifebetter/provider/dataProvider.dart';
+import 'package:lifebetter/provider/getall.dart';
 import 'package:lifebetter/screen/Health/healthdetail.dart';
 import 'package:lifebetter/screen/Loader/circularLoader3.dart';
 
@@ -11,12 +15,12 @@ class HealthPage extends StatefulWidget {
   _HealthPageState createState() => _HealthPageState();
 }
 
-class _HealthPageState extends State<HealthPage> {
+class _HealthPageState extends State<HealthPage> with AfterLayoutMixin {
   var fullWidth, fullHeight;
   var firstColor = "#1BD7BB",
       secondColor = "#14C9CB",
       lightGreyColor = "#F8F8F8";
-
+  final provider = getIt<DataProvider>();
   final scrollDirection = Axis.vertical;
   List<dynamic> healthdata = [];
 
@@ -232,5 +236,23 @@ class _HealthPageState extends State<HealthPage> {
         );
       },
     );
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    provider.getHealth();
+    provider.healthDataStream.listen((snp) {
+      snp.fold((l) {
+        print("Something went wrong $l");
+        if (l is ErrorHelper) {
+          print("Unable to connect ");
+        }
+      }, (r) {
+        print("Data Length ${r.length}");
+      });
+      setState(() {
+        print("Aung Htet Kyaw is Successfull");
+      });
+    });
   }
 }

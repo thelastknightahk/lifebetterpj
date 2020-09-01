@@ -1,4 +1,4 @@
 class DataCenter{
-  static List<dynamic> healthData = [];
-  static List<dynamic> jobAndroid = [];
+  // static List<dynamic> healthData = [];
+  // static List<dynamic> jobAndroid = [];
 }

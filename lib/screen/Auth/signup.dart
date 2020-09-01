@@ -20,7 +20,7 @@ class _SignupFormState extends State<SignupForm> {
   final _auth = AuthService();
 
   final _key = GlobalKey<FormState>();
-
+  var phonenofull,code,phone;
   @override
   Widget build(BuildContext context) {
     var fullwidth = MediaQuery.of(context).size.width;
@@ -77,6 +77,7 @@ class _SignupFormState extends State<SignupForm> {
                           v.isEmpty ? 'Enter Valid Phone Number ' : null,
                       onChanged: (val) {
                         OffData.phNo = val; // Assign OffData Ph No
+                        phone = val;
                       },
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
@@ -101,8 +102,13 @@ class _SignupFormState extends State<SignupForm> {
               ),
               child: Text("Sign Up"),
               onPressed: () async {
-                print(
-                    "${OffData.userPhoneNoDetail} ${OffData.userName} ${OffData.countryName}"); //add data to store
+                if(code == null){
+                  code = "+95";
+                }
+                OffData.userPhoneNoDetail = code+phone;
+                print("${OffData.userPhoneNoDetail} ${OffData.userName} ${OffData.countryName}");
+                // print(
+                //     "${OffData.userPhoneNoDetail} ${OffData.userName} ${OffData.countryName} ** ${code+phone}"); //add data to store
 
                 Firestore.instance
                     .collection("users")
@@ -134,8 +140,10 @@ class _SignupFormState extends State<SignupForm> {
             title: Text('Select your phone code'),
             onValuePicked: (Country country) => setState(() {
               _selectedDialogCountry = country;
-              OffData.phCode = "+" +
-                  _selectedDialogCountry.phoneCode; //Assign OffData to phcode
+              // OffData.phCode = "+" +
+              //     _selectedDialogCountry.phoneCode; //Assign OffData to phcode
+                  code = "+" +
+                  _selectedDialogCountry.phoneCode;
               OffData.countryName =
                   _selectedDialogCountry.name; //Assign OffData to country Name
             }),
